@@ -1,0 +1,9 @@
+{
+	"name": "adf-modellingexercise",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "754eaaed-12cb-4fd9-b770-3c167836ea2c",
+		"tenantId": "540d6e0e-8b44-4420-a0b5-a06c4d7f9666"
+	}
+}

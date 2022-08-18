@@ -1,0 +1,29 @@
+{
+	"name": "sourceOrderStatus",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStoragetoclient",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "OrderStatus.csv",
+				"fileSystem": "clientcontainer"
+			},
+			"columnDelimiter": "|",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "OrderStatusId|StatusName|IsOpen|IsAbort",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

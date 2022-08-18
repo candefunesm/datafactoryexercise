@@ -1,0 +1,29 @@
+{
+	"name": "sourceOrderStatusHistory",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStoragetoclient",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "OrderStatusHistory.csv",
+				"fileSystem": "clientcontainer"
+			},
+			"columnDelimiter": "|",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "OrderNummer|SeqNr|OldOrderStatusId|NewOrderStatusId|ReasonCode|ExtraInfo|TimeStamp",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

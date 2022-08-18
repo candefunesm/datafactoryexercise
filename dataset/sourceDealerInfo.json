@@ -1,0 +1,29 @@
+{
+	"name": "sourceDealerInfo",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStoragetoclient",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "DealersInfo.csv",
+				"fileSystem": "clientcontainer"
+			},
+			"columnDelimiter": "|",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "OrderNummer|Channel|MediumName",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

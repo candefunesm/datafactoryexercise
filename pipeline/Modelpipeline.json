@@ -1,0 +1,139 @@
+{
+	"name": "Modelpipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "CreatePivotTable",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[CreatePivotTable]"
+				},
+				"linkedServiceName": {
+					"referenceName": "Database",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "CreateOrderStatusHistoryMax",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[CreateOrderStatusHistoryMax]"
+				},
+				"linkedServiceName": {
+					"referenceName": "Database",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "CreateModelTable",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "CreatePivotTable",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CreateOrderStatusHistoryMax",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[CreateModelTable]"
+				},
+				"linkedServiceName": {
+					"referenceName": "Database",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "CreateDimdate",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[dbo].[CreateDateTable]",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "DROP TABLE IF EXISTS dim_date",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DataWarehouse",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": "A"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DataWarehouse",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": "dim_date"
+						}
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-08-16T18:21:52Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
